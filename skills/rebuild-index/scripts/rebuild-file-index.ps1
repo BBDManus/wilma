@@ -4,14 +4,22 @@
 # Normal operation uses update-file-index.ps1 (incremental-append).
 # Invoked by the rebuild-index skill after user confirmation.
 
-# ── Resolve workspace root from script location ───────────────────────────────
-# Location: skills/rebuild-index/scripts/ (3 levels inside plugin root)
-$rebuildIndexDir = Split-Path $PSScriptRoot -Parent     # rebuild-index/
-$skillsDir       = Split-Path $rebuildIndexDir -Parent  # skills/
-$pluginRoot      = Split-Path $skillsDir -Parent        # wilma/
-$pluginsDir      = Split-Path $pluginRoot -Parent       # plugins/
-$dotClaudeDir    = Split-Path $pluginsDir -Parent       # .claude/
-$workspace       = Split-Path $dotClaudeDir -Parent     # workspace root
+# ── Resolve workspace root ────────────────────────────────────────────────────
+# $CLAUDE_PROJECT_DIR is provided by the harness and works for both local and
+# global (marketplace cache) installs. Walk-up fallback for local installs only.
+if ($env:CLAUDE_PROJECT_DIR -and (Test-Path $env:CLAUDE_PROJECT_DIR)) {
+    $workspace    = $env:CLAUDE_PROJECT_DIR
+    $dotClaudeDir = Join-Path $workspace ".claude"
+    $pluginRoot   = Join-Path $dotClaudeDir "plugins\wilma"
+} else {
+    # Location: skills/rebuild-index/scripts/ (3 levels inside plugin root)
+    $rebuildIndexDir = Split-Path $PSScriptRoot -Parent     # rebuild-index/
+    $skillsDir       = Split-Path $rebuildIndexDir -Parent  # skills/
+    $pluginRoot      = Split-Path $skillsDir -Parent        # wilma/
+    $pluginsDir      = Split-Path $pluginRoot -Parent       # plugins/
+    $dotClaudeDir    = Split-Path $pluginsDir -Parent       # .claude/
+    $workspace       = Split-Path $dotClaudeDir -Parent     # workspace root
+}
 
 $settingsFile = Join-Path $dotClaudeDir "wilma.local.md"
 if (Test-Path $settingsFile) {

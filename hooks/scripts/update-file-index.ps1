@@ -3,12 +3,19 @@
 # Purpose: Incremental-append only — adds new files to FILE-INDEX.md, never rebuilds.
 # Full rebuild: use the rebuild-index skill or run rebuild-file-index.ps1 manually.
 
-# ── Resolve workspace root from script location ───────────────────────────────
-$hooksDir     = Split-Path $PSScriptRoot -Parent
-$pluginRoot   = Split-Path $hooksDir -Parent
-$pluginsDir   = Split-Path $pluginRoot -Parent
-$dotClaudeDir = Split-Path $pluginsDir -Parent
-$workspace    = Split-Path $dotClaudeDir -Parent
+# ── Resolve workspace root ────────────────────────────────────────────────────
+# $CLAUDE_PROJECT_DIR is provided by the harness and works for both local and
+# global (marketplace cache) installs. Walk-up fallback for local installs only.
+if ($env:CLAUDE_PROJECT_DIR -and (Test-Path $env:CLAUDE_PROJECT_DIR)) {
+    $workspace    = $env:CLAUDE_PROJECT_DIR
+    $dotClaudeDir = Join-Path $workspace ".claude"
+} else {
+    $hooksDir     = Split-Path $PSScriptRoot -Parent
+    $pluginRoot   = Split-Path $hooksDir -Parent
+    $pluginsDir   = Split-Path $pluginRoot -Parent
+    $dotClaudeDir = Split-Path $pluginsDir -Parent
+    $workspace    = Split-Path $dotClaudeDir -Parent
+}
 
 # Settings override: .claude/wilma.local.md
 $settingsFile = Join-Path $dotClaudeDir "wilma.local.md"

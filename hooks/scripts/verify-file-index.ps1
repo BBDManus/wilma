@@ -2,12 +2,19 @@
 # Trigger: PostToolUse (Glob, Grep, Read)
 # Purpose: Detect files on disk absent from FILE-INDEX.md and auto-patch missing entries.
 
-# ── Resolve workspace root from script location ───────────────────────────────
-$hooksDir     = Split-Path $PSScriptRoot -Parent
-$pluginRoot   = Split-Path $hooksDir -Parent
-$pluginsDir   = Split-Path $pluginRoot -Parent
-$dotClaudeDir = Split-Path $pluginsDir -Parent
-$workspace    = Split-Path $dotClaudeDir -Parent
+# ── Resolve workspace root ────────────────────────────────────────────────────
+# $CLAUDE_PROJECT_DIR is provided by the harness and works for both local and
+# global (marketplace cache) installs. Walk-up fallback for local installs only.
+if ($env:CLAUDE_PROJECT_DIR -and (Test-Path $env:CLAUDE_PROJECT_DIR)) {
+    $workspace    = $env:CLAUDE_PROJECT_DIR
+    $dotClaudeDir = Join-Path $workspace ".claude"
+} else {
+    $hooksDir     = Split-Path $PSScriptRoot -Parent
+    $pluginRoot   = Split-Path $hooksDir -Parent
+    $pluginsDir   = Split-Path $pluginRoot -Parent
+    $dotClaudeDir = Split-Path $pluginsDir -Parent
+    $workspace    = Split-Path $dotClaudeDir -Parent
+}
 
 $settingsFile = Join-Path $dotClaudeDir "wilma.local.md"
 if (Test-Path $settingsFile) {
