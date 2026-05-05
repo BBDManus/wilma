@@ -1,0 +1,26 @@
+---
+workspace_root: ""
+worklog_path: "workshop/worklog.md"
+---
+
+# workspace-housekeeping settings
+
+Copy this file to `.claude/workspace-housekeeping.local.md` in your workspace root.
+
+## Fields
+
+| Field | Default | Purpose |
+| ----- | ------- | ------- |
+| `workspace_root` | Auto-detected from plugin install path | Absolute path to workspace root. Leave blank to auto-detect. Set explicitly if your plugin is not installed at `{workspace}/.claude/plugins/workspace-housekeeping/`. |
+| `worklog_path` | `workshop/worklog.md` | Path to worklog file, relative to workspace root. |
+
+## Auto-detection
+
+When `workspace_root` is blank, hook scripts derive the workspace root by walking up from their own location:
+
+```
+{workspace}/.claude/plugins/workspace-housekeeping/hooks/scripts/
+          ^--- 5 levels up = workspace root
+```
+
+This works correctly for standard plugin installation. Only set `workspace_root` explicitly if your directory layout differs.

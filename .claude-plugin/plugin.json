@@ -1,0 +1,9 @@
+{
+  "name": "wilma",
+  "version": "1.0.0",
+  "description": "Passive workspace maintenance — file index, worklog, and governance review for markdown workspaces.",
+  "author": {
+    "name": "manus@bbd.co.za"
+  },
+  "keywords": ["workspace", "filekeeper", "worklog", "governance", "markdown"]
+}

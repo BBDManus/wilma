@@ -1,0 +1,44 @@
+{
+  "skill": "weekly-review",
+  "version": "1.0.0",
+  "paths": {
+    "backlog": "planning/backlog.md",
+    "outcomes": "planning/outcomes.md",
+    "work_registry": "planning/work-registry.md",
+    "worklog": "workshop/worklog.md",
+    "report_output": "workshop/_scratch"
+  },
+  "stale_rules": {
+    "default_days": 14,
+    "by_phase": {
+      "discover": 30,
+      "define": 21,
+      "develop": 14,
+      "deliver": 7
+    }
+  },
+  "scan_paths": [
+    "planning/",
+    "workshop/",
+    "publish/"
+  ],
+  "exclude_paths": [
+    "resources/",
+    "collaborative/",
+    "workshop/worklog.md",
+    "workshop/_scratch"
+  ],
+  "orphan_pool_header": "## Orphaned Pool",
+  "required_frontmatter_fields": [
+    "title",
+    "type",
+    "phase",
+    "version",
+    "author",
+    "created",
+    "updated",
+    "project",
+    "outcome"
+  ],
+  "new_file_window_days": 7
+}
