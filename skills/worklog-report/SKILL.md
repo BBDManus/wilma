@@ -1,5 +1,5 @@
 ---
-name: "Worklog Report"
+name: "worklog-report"
 description: "This skill should be used when the user invokes /worklog-report, asks for 'worklog summary', 'weekly report', 'what did I work on', 'show my activity', 'activity report', or wants a summary of recent work."
 allowed-tools: ["Read", "Write"]
 version: "1.0.0"

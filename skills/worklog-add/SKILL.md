@@ -1,5 +1,5 @@
 ---
-name: "Worklog Add"
+name: "worklog-add"
 description: "This skill should be used when the user invokes /worklog-add, says 'log this to worklog', 'add worklog entry', 'log my work', 'record this task', or asks to manually add something to the work log."
 argument-hint: "<description of work done>"
 allowed-tools: ["Bash", "Read"]

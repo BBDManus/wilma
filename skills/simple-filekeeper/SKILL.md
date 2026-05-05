@@ -1,5 +1,5 @@
 ---
-name: "Simple Filekeeper"
+name: "simple-filekeeper"
 description: "This skill should be used when asked about FILE-INDEX.md, how the file index works, why a file is or isn't in the index, file index maintenance, missing index entries, how to rebuild the index, or when troubleshooting the file index. Also loaded when asked to look up a file in the workspace."
 version: "1.0.0"
 ---

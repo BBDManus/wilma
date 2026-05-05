@@ -1,5 +1,5 @@
 ---
-name: "Rebuild Index"
+name: "rebuild-index"
 description: "This skill should be used when the user invokes /wilma:rebuild-index, asks to 'rebuild file index', 'reset file index', 'regenerate FILE-INDEX', 'rebuild FILE-INDEX.md from scratch', or when the file index is corrupt or severely out of date."
 allowed-tools: ["Bash", "Read"]
 version: "1.0.0"

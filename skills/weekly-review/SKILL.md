@@ -1,5 +1,5 @@
 ---
-name: "Weekly Review"
+name: "weekly-review"
 description: "This skill should be used when the user invokes /weekly-review, asks for 'weekly review', 'workspace review', 'governance review', 'what's orphaned', 'stale work', 'unclassified files', 'show orphaned files', or wants a health check of the workspace."
 allowed-tools: ["Read", "Bash", "Write"]
 version: "1.0.0"
