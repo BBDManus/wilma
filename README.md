@@ -1,5 +1,4 @@
 ---
-title: "wilma plugin"
 type: plugin
 phase: deliver
 version: "1.0.0"
@@ -114,7 +113,7 @@ Config fields (weekly review):
 
 Hook scripts derive workspace root automatically by walking up from `$PSScriptRoot`:
 
-```
+```text
 {workspace}/.claude/plugins/wilma/hooks/scripts/
      ^─────────────────────────────────────────────────────────── 5 levels up
 ```
