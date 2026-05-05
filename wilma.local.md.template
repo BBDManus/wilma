@@ -3,15 +3,15 @@ workspace_root: ""
 worklog_path: "workshop/worklog.md"
 ---
 
-# workspace-housekeeping settings
+# wilma settings
 
-Copy this file to `.claude/workspace-housekeeping.local.md` in your workspace root.
+Copy this file to `.claude/wilma.local.md` in your workspace root.
 
 ## Fields
 
 | Field | Default | Purpose |
 | ----- | ------- | ------- |
-| `workspace_root` | Auto-detected from plugin install path | Absolute path to workspace root. Leave blank to auto-detect. Set explicitly if your plugin is not installed at `{workspace}/.claude/plugins/workspace-housekeeping/`. |
+| `workspace_root` | Auto-detected from plugin install path | Absolute path to workspace root. Leave blank to auto-detect. Set explicitly if your plugin is not installed at `{workspace}/.claude/plugins/wilma/`. |
 | `worklog_path` | `workshop/worklog.md` | Path to worklog file, relative to workspace root. |
 
 ## Auto-detection
@@ -19,7 +19,7 @@ Copy this file to `.claude/workspace-housekeeping.local.md` in your workspace ro
 When `workspace_root` is blank, hook scripts derive the workspace root by walking up from their own location:
 
 ```
-{workspace}/.claude/plugins/workspace-housekeeping/hooks/scripts/
+{workspace}/.claude/plugins/wilma/hooks/scripts/
           ^--- 5 levels up = workspace root
 ```
 

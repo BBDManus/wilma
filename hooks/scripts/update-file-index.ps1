@@ -10,8 +10,8 @@ $pluginsDir   = Split-Path $pluginRoot -Parent
 $dotClaudeDir = Split-Path $pluginsDir -Parent
 $workspace    = Split-Path $dotClaudeDir -Parent
 
-# Settings override: .claude/workspace-housekeeping.local.md
-$settingsFile = Join-Path $dotClaudeDir "workspace-housekeeping.local.md"
+# Settings override: .claude/wilma.local.md
+$settingsFile = Join-Path $dotClaudeDir "wilma.local.md"
 if (Test-Path $settingsFile) {
     $content = Get-Content $settingsFile -Raw
     if ($content -match '(?m)^workspace_root:\s*["'']?([^"''\r\n]+)["'']?\s*$') {

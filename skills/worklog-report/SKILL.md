@@ -12,7 +12,7 @@ Generate a weekly activity report from the workspace worklog.
 ## Setup
 
 1. Determine the worklog path:
-   - Read `.claude/workspace-housekeeping.local.md` if it exists — use `worklog_path` field if present
+   - Read `.claude/wilma.local.md` if it exists — use `worklog_path` field if present
    - Default: `workshop/worklog.md`
 2. Read the worklog file in full.
 3. Parse all table rows (skip header rows starting with `| Date` or `| ---`).

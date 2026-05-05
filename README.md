@@ -1,5 +1,5 @@
 ---
-title: "workspace-housekeeping plugin"
+title: "wilma plugin"
 type: plugin
 phase: deliver
 version: "1.0.0"
@@ -11,7 +11,7 @@ outcome: "O-003"
 confluence_page: ""
 ---
 
-# workspace-housekeeping
+# wilma
 
 Passive workspace maintenance plugin for markdown workspaces. Keeps file index and worklog current automatically, and provides governance review on demand.
 
@@ -28,13 +28,13 @@ Passive workspace maintenance plugin for markdown workspaces. Keeps file index a
 | **Manual worklog** | `/worklog-add <description>` skill for entries not auto-captured. |
 | **Activity report** | `/worklog-report` skill generates a weekly markdown summary with trends and suggestions. |
 | **Governance review** | `/weekly-review` skill scans workspace for orphaned, stale, and unclassified files. |
-| **Index rebuild** | `/workspace-housekeeping:rebuild-index` skill for full rebuilds, gated with a safety confirmation. |
+| **Index rebuild** | `/wilma:rebuild-index` skill for full rebuilds, gated with a safety confirmation. |
 
 ---
 
 ## Installation
 
-This plugin is installed locally in the workspace at `.claude/plugins/workspace-housekeeping/`.
+This plugin is installed locally in the workspace at `.claude/plugins/wilma/`.
 
 Enable it in Claude Code settings to activate hooks and skills. After enabling, **restart Claude Code** for hooks to take effect.
 
@@ -55,7 +55,7 @@ If the workspace previously used standalone hooks in `.claude/settings.json`, re
 
 ### Workspace settings (optional)
 
-Copy `workspace-housekeeping.local.md.template` to `.claude/workspace-housekeeping.local.md`:
+Copy `wilma.local.md.template` to `.claude/wilma.local.md`:
 
 ```yaml
 ---
@@ -64,7 +64,7 @@ worklog_path: "workshop/worklog.md"
 ---
 ```
 
-- `workspace_root`: Leave blank for auto-detection (recommended). Set explicitly only if plugin is not installed at the standard `{workspace}/.claude/plugins/workspace-housekeeping/` path.
+- `workspace_root`: Leave blank for auto-detection (recommended). Set explicitly only if plugin is not installed at the standard `{workspace}/.claude/plugins/wilma/` path.
 - `worklog_path`: Path to worklog file, relative to workspace root.
 
 ### Filekeeper config override
@@ -95,7 +95,7 @@ Config fields (weekly review):
 | `worklog-add` | `/worklog-add <description>` | Manually append worklog entry |
 | `worklog-report` | `/worklog-report` | Generate weekly activity report |
 | `weekly-review` | `/weekly-review` | Workspace governance scan |
-| `rebuild-index` | `/workspace-housekeeping:rebuild-index` | Full FILE-INDEX.md rebuild (safety-gated) |
+| `rebuild-index` | `/wilma:rebuild-index` | Full FILE-INDEX.md rebuild (safety-gated) |
 
 ---
 
@@ -115,11 +115,11 @@ Config fields (weekly review):
 Hook scripts derive workspace root automatically by walking up from `$PSScriptRoot`:
 
 ```
-{workspace}/.claude/plugins/workspace-housekeeping/hooks/scripts/
+{workspace}/.claude/plugins/wilma/hooks/scripts/
      ^─────────────────────────────────────────────────────────── 5 levels up
 ```
 
-An explicit override can be set in `.claude/workspace-housekeeping.local.md`.
+An explicit override can be set in `.claude/wilma.local.md`.
 
 ---
 

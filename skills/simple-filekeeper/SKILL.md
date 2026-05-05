@@ -78,4 +78,4 @@ To rebuild from scratch (destroys manual descriptions): use the `rebuild-index` 
 
 ## Workspace Settings
 
-To override workspace root or worklog path, create `.claude/workspace-housekeeping.local.md` from the template at `[plugin root]/workspace-housekeeping.local.md.template`.
+To override workspace root or worklog path, create `.claude/wilma.local.md` from the template at `[plugin root]/wilma.local.md.template`.

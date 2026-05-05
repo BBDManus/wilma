@@ -1,6 +1,6 @@
 ---
 name: "Rebuild Index"
-description: "This skill should be used when the user invokes /workspace-housekeeping:rebuild-index, asks to 'rebuild file index', 'reset file index', 'regenerate FILE-INDEX', 'rebuild FILE-INDEX.md from scratch', or when the file index is corrupt or severely out of date."
+description: "This skill should be used when the user invokes /wilma:rebuild-index, asks to 'rebuild file index', 'reset file index', 'regenerate FILE-INDEX', 'rebuild FILE-INDEX.md from scratch', or when the file index is corrupt or severely out of date."
 allowed-tools: ["Bash", "Read"]
 version: "1.0.0"
 ---
@@ -35,7 +35,7 @@ Only proceed if the user types exactly `CONFIRM` (case-insensitive). On any othe
 2. If confirmed: run the rebuild script via Bash:
 
    ```bash
-   powershell -ExecutionPolicy Bypass -File ".claude/plugins/workspace-housekeeping/skills/rebuild-index/scripts/rebuild-file-index.ps1"
+   powershell -ExecutionPolicy Bypass -File ".claude/plugins/wilma/skills/rebuild-index/scripts/rebuild-file-index.ps1"
    ```
 
 3. Report the result to the user:
@@ -45,6 +45,6 @@ Only proceed if the user types exactly `CONFIRM` (case-insensitive). On any othe
 ## Notes
 
 - The rebuild script derives workspace root automatically from its own location (no hardcoded paths).
-- Config is loaded from `.claude/plugins/simple-filekeeper/filekeeper-rules.json` if present, otherwise from the plugin default at `.claude/plugins/workspace-housekeeping/config/filekeeper-rules.default.json`.
+- Config is loaded from `.claude/plugins/simple-filekeeper/filekeeper-rules.json` if present, otherwise from the plugin default at `.claude/plugins/wilma/config/filekeeper-rules.default.json`.
 - After rebuild, incremental hooks resume normal operation automatically.
 - To add descriptions back to the index, edit `FILE-INDEX.md` directly — hooks will never overwrite existing descriptions.

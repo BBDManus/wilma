@@ -11,7 +11,7 @@ $workspace    = Split-Path $dotClaudeDir -Parent
 
 $worklogRelPath = "workshop/worklog.md"
 
-$settingsFile = Join-Path $dotClaudeDir "workspace-housekeeping.local.md"
+$settingsFile = Join-Path $dotClaudeDir "wilma.local.md"
 if (Test-Path $settingsFile) {
     $settingsContent = Get-Content $settingsFile -Raw
     if ($settingsContent -match '(?m)^workspace_root:\s*["'']?([^"''\r\n]+)["'']?\s*$') {

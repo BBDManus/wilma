@@ -14,7 +14,7 @@ Manually append a work entry to the workspace worklog.
 
 1. Extract description from everything after `/worklog-add` (or from the user's phrasing if invoked conversationally).
 2. Determine the worklog path:
-   - Read `.claude/workspace-housekeeping.local.md` if it exists — use `worklog_path` field if present
+   - Read `.claude/wilma.local.md` if it exists — use `worklog_path` field if present
    - Default: `workshop/worklog.md`
 3. Infer `project` by checking if the description mentions a known workshop project folder name (e.g. `fxbanking`, `_scratch`). Default to `_root` if none found.
 4. Get current timestamp: date = `yyyy-MM-dd`, time = `HH:mm`.

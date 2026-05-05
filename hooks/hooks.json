@@ -1,5 +1,5 @@
 {
-  "description": "workspace-housekeeping automation hooks — file index maintenance and worklog capture",
+  "description": "wilma automation hooks — file index maintenance and worklog capture",
   "hooks": {
     "PostToolUse": [
       {

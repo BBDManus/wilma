@@ -8,12 +8,12 @@
 # Location: skills/rebuild-index/scripts/ (3 levels inside plugin root)
 $rebuildIndexDir = Split-Path $PSScriptRoot -Parent     # rebuild-index/
 $skillsDir       = Split-Path $rebuildIndexDir -Parent  # skills/
-$pluginRoot      = Split-Path $skillsDir -Parent        # workspace-housekeeping/
+$pluginRoot      = Split-Path $skillsDir -Parent        # wilma/
 $pluginsDir      = Split-Path $pluginRoot -Parent       # plugins/
 $dotClaudeDir    = Split-Path $pluginsDir -Parent       # .claude/
 $workspace       = Split-Path $dotClaudeDir -Parent     # workspace root
 
-$settingsFile = Join-Path $dotClaudeDir "workspace-housekeeping.local.md"
+$settingsFile = Join-Path $dotClaudeDir "wilma.local.md"
 if (Test-Path $settingsFile) {
     $content = Get-Content $settingsFile -Raw
     if ($content -match '(?m)^workspace_root:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
