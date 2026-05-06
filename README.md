@@ -81,6 +81,7 @@ Config fields (weekly review):
 
 | Skill | Slash command | What it does |
 | ----- | ------------- | ------------ |
+| `wilma-setup` | `/wilma-setup` | Interactive setup wizard. Asks all configuration questions, writes `.claude/wilma.local.md`, enables `wilma@bonkers` in `settings.json`, gitignores local config, optionally scaffolds governance config overrides, and creates missing workspace files. Re-entrant — safe to run any time to update settings. |
 | `simple-filekeeper` | (internal) | Reference skill documenting how FILE-INDEX.md maintenance works, exemption rules, and the file lookup workflow. Used for troubleshooting the index. |
 | `worklog-add` | `/worklog-add <description>` | Appends a manual entry to `worklog.md` with timestamp and project inference. Use for work not auto-captured by hooks (meetings, decisions, research). |
 | `worklog-report` | `/worklog-report` | Reads `worklog.md` and generates a weekly activity report: activity by day/tool/project, top files touched, and 3–5 improvement suggestions. |
