@@ -1,12 +1,12 @@
 ---
 name: "simple-filekeeper"
 description: "This skill should be used when asked about FILE-INDEX.md, how the file index works, why a file is or isn't in the index, file index maintenance, missing index entries, how to rebuild the index, or when troubleshooting the file index. Also loaded when asked to look up a file in the workspace."
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Simple Filekeeper
 
-Maintains `FILE-INDEX.md` automatically via PostToolUse hooks. Incremental-append only — never rebuilds unless explicitly triggered by the rebuild-index skill.
+Maintains the file index automatically via PostToolUse hooks. Incremental-append only — never rebuilds unless explicitly triggered by the rebuild-index skill.
 
 ## How It Works
 
@@ -21,20 +21,16 @@ Manual full rebuild available via the `rebuild-index` skill. Never runs automati
 
 ## Configuration
 
-Config loads with workspace-override fallback:
+All config is read from `.claude/wilma.local.md` (YAML frontmatter). If the file or a field is absent, built-in defaults apply.
 
-1. `.claude/plugins/simple-filekeeper/filekeeper-rules.json` (workspace override — backward compatible)
-2. `[plugin root]/config/filekeeper-rules.default.json` (plugin default)
-
-Key config fields:
-
-| Field | Purpose |
-| ----- | ------- |
-| `index_path` | Relative path to the index file (default: `FILE-INDEX.md`) |
-| `exclude_dirs` | Top-level dirs never indexed (`.claude`, `.git`) |
-| `exclude_paths` | Sub-paths exempt from indexing (`resources/tools`, `resources/scripts`) |
-| `index_exempt_files` | Files never added to index (`FILE-INDEX.md` itself) |
-| `behavior.mode` | `incremental` — only appends, never rewrites |
+| Field | Default | Purpose |
+| ----- | ------- | ------- |
+| `index_path` | `wilma/file-index.md` | Relative path to the index file |
+| `exclude_dirs` | `[".claude", ".git", "wilma"]` | Top-level dirs never indexed |
+| `exclude_paths` | `[]` | Sub-paths exempt from indexing |
+| `index_exempt_files` | `[]` | Files never added to index |
+| `index_behavior_mode` | `incremental` | Update mode — `incremental` = append-only, never rewrites |
+| `index_missing_action` | `warn_and_exit` | Behaviour when index file is missing at hook time |
 
 ## Exemption Rules
 
@@ -60,10 +56,10 @@ Descriptions populated manually or by Claude when context is available. Hooks ne
 
 When looking for any file:
 
-1. Check `FILE-INDEX.md` first
+1. Check the file index first
 2. If not found → Glob search for filename pattern
 3. If Glob finds matches → show user results, ask for confirmation
-4. User confirms → add entry to FILE-INDEX for future queries
+4. User confirms → add entry to file index for future queries
 5. If still not found → check `resources/` for manually downloaded files
 
 ## Missing Entries
@@ -78,4 +74,4 @@ To rebuild from scratch (destroys manual descriptions): use the `rebuild-index` 
 
 ## Workspace Settings
 
-To override workspace root or worklog path, create `.claude/wilma.local.md` from the template at `[plugin root]/wilma.local.md.template`.
+All settings are stored in `.claude/wilma.local.md`. Run `/wilma-setup` to configure or update them.

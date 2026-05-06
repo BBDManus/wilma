@@ -33,6 +33,16 @@ if ($settingsContent -match '(?m)^worklog_path:\s*["'']?([^"''\r\n]+)["'']?\s*$'
     $worklogRelPath = $Matches[1].Trim()
 }
 
+# Parse worklog_tracked_fields from wilma.local.md
+$trackedFields = @()
+if ($settingsContent -match '(?m)^worklog_tracked_fields:\s*(\[.*?\])\s*$') {
+    $raw = $Matches[1]
+    $fieldMatches = [regex]::Matches($raw, '"([^"]*)"')
+    if ($fieldMatches.Count -gt 0) {
+        $trackedFields = $fieldMatches | ForEach-Object { $_.Groups[1].Value }
+    }
+}
+
 $worklogPath = Join-Path $workspace ($worklogRelPath -replace '/', '\')
 
 if (-not (Test-Path $worklogPath)) {
@@ -85,8 +95,27 @@ if ($filePath -like "*worklog.md*") { exit 0 }
 # ── Infer project folder ──────────────────────────────────────────────────────
 $projectFolder = "_root"
 $normalised = $filePath -replace '\\', '/'
-if ($normalised -match '^workshop/([^/]+)/') {
+if ($normalised -match '^([^/]+)/[^/]+/') {
     $projectFolder = $Matches[1]
+}
+
+# ── Extract tracked frontmatter fields from the written file ──────────────────
+$trackedValues = @()
+if ($trackedFields.Count -gt 0 -and $filePath -and (Test-Path (Join-Path $workspace ($filePath -replace '/', '\')))) {
+    $absPath = Join-Path $workspace ($filePath -replace '/', '\')
+    $fileContent = Get-Content $absPath -Raw -ErrorAction SilentlyContinue
+    if ($fileContent -match '(?s)^---\r?\n(.+?)\r?\n---') {
+        $frontmatter = $Matches[1]
+        foreach ($field in $trackedFields) {
+            if ($frontmatter -match "(?m)^${field}:\s*[""']?([^""'\r\n]+)[""']?\s*$") {
+                $trackedValues += $Matches[1].Trim() -replace '\|', '-'
+            } else {
+                $trackedValues += ""
+            }
+        }
+    } else {
+        $trackedValues = @("") * $trackedFields.Count
+    }
 }
 
 # ── Build and append row ──────────────────────────────────────────────────────
@@ -97,7 +126,8 @@ $time = $now.ToString("HH:mm")
 $safeFile = $filePath -replace '\|', '/'
 $safeDesc = $description -replace '\|', '-'
 
-$row = "| $date | $time | $toolName | $safeFile | $actionType | $projectFolder | $safeDesc |"
+$extraCols = if ($trackedValues.Count -gt 0) { " " + ($trackedValues -join " | ") + " |" } else { "" }
+$row = "| $date | $time | $toolName | $safeFile | $actionType | $projectFolder | $safeDesc |$extraCols"
 
 Add-Content -Path $worklogPath -Value $row -Encoding UTF8
 Write-Host "worklog: logged $toolName on $safeFile"

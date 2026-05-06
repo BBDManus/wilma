@@ -1,6 +1,24 @@
 ---
 workspace_root: ""
-worklog_path: "workshop/worklog.md"
+worklog_path: "wilma/worklog.md"
+index_path: "wilma/file-index.md"
+backlog_path: "wilma/backlog.md"
+outcomes_path: "wilma/outcomes.md"
+work_registry_path: "wilma/work-registry.md"
+report_output_dir: "wilma/reports"
+exclude_dirs: [".claude", ".git", "wilma"]
+exclude_paths: []
+index_exempt_files: []
+index_behavior_mode: "incremental"
+index_missing_action: "warn_and_exit"
+stale_days: 14
+scan_paths: ["wilma/"]
+weekly_review_exclude_paths: ["wilma/worklog.md", "wilma/file-index.md", "wilma/reports"]
+new_file_window_days: 7
+orphan_pool_header: "## Orphaned Pool"
+frontmatter_fields: []
+frontmatter_template_path: ""
+worklog_tracked_fields: []
 ---
 
 # wilma settings
@@ -11,8 +29,26 @@ Copy this file to `.claude/wilma.local.md` in your workspace root.
 
 | Field | Default | Purpose |
 | ----- | ------- | ------- |
-| `workspace_root` | Auto-detected from plugin install path | Absolute path to workspace root. Leave blank to auto-detect. Set explicitly if your plugin is not installed at `{workspace}/.claude/plugins/wilma/`. |
-| `worklog_path` | `workshop/worklog.md` | Path to worklog file, relative to workspace root. |
+| `workspace_root` | Auto-detected | Absolute path to workspace root. Leave blank to auto-detect. Set explicitly if your plugin is not installed at `{workspace}/.claude/plugins/wilma/`. |
+| `worklog_path` | `wilma/worklog.md` | Path to worklog file, relative to workspace root. |
+| `index_path` | `wilma/file-index.md` | Path to file index, relative to workspace root. |
+| `backlog_path` | `wilma/backlog.md` | Path to backlog file. |
+| `outcomes_path` | `wilma/outcomes.md` | Path to outcomes register. |
+| `work_registry_path` | `wilma/work-registry.md` | Path to work registry. |
+| `report_output_dir` | `wilma/reports` | Directory where weekly review reports are saved. |
+| `exclude_dirs` | `[".claude", ".git", "wilma"]` | Top-level directories never included in the file index. |
+| `exclude_paths` | `[]` | Sub-paths exempt from file indexing. |
+| `index_exempt_files` | `[]` | Individual filenames never added to the file index. |
+| `index_behavior_mode` | `incremental` | File index update mode. `incremental` = append-only, never rewrites. |
+| `index_missing_action` | `warn_and_exit` | What to do if the index file is missing when a hook runs. |
+| `stale_days` | `14` | Days without an update before a file is considered stale in weekly review. |
+| `scan_paths` | `["wilma/"]` | Directories scanned during weekly review. |
+| `weekly_review_exclude_paths` | `["wilma/worklog.md", "wilma/file-index.md", "wilma/reports"]` | Paths excluded from weekly review scanning. |
+| `new_file_window_days` | `7` | Files created within this many days are considered "new" in weekly review. |
+| `orphan_pool_header` | `## Orphaned Pool` | Markdown heading used to locate the orphaned pool section in work-registry.md. |
+| `frontmatter_fields` | `[]` | Field names weekly-review checks for completeness. Files missing any of these are flagged. Leave empty to only check for presence of any frontmatter block. |
+| `frontmatter_template_path` | `""` | Path to a workspace `.md` file whose frontmatter keys define the required field set. Takes precedence over `frontmatter_fields` if set. |
+| `worklog_tracked_fields` | `[]` | Frontmatter fields extracted from each modified file and appended as extra columns in the worklog row. |
 
 ## Auto-detection
 

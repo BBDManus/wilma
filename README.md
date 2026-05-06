@@ -43,37 +43,24 @@ When enabled, Claude Code automatically registers all hooks defined in `hooks/ho
 
 ## Configuration
 
-### Workspace settings (optional)
+All configuration lives in a single file: `.claude/wilma.local.md`.
 
-Copy `wilma.local.md.template` to `.claude/wilma.local.md` to override defaults:
+Run `/wilma-setup` to create or update this file interactively. It asks all configuration questions and writes the file for you.
 
-```yaml
----
-workspace_root: ""
-worklog_path: "workshop/worklog.md"
----
-```
+To configure manually, copy `wilma.local.md.template` to `.claude/wilma.local.md`. The template documents all available fields with their defaults.
 
-- `workspace_root`: Leave blank for auto-detection (recommended). Set explicitly only if the plugin is not installed at the standard path or if `$CLAUDE_PROJECT_DIR` is not being set by your environment.
-- `worklog_path`: Path to worklog file, relative to workspace root.
+Key fields:
 
-### Filekeeper config override
-
-To customise file index rules, create `.claude/plugins/simple-filekeeper/filekeeper-rules.json`. Plugin defaults are at `config/filekeeper-rules.default.json`.
-
-### Weekly review config override
-
-To customise governance scan rules, create `.claude/plugins/worklog/weekly-review-rules.json`. Plugin defaults are at `config/weekly-review-rules.default.json`.
-
-Config fields (weekly review):
-
-| Field | Purpose |
-| ----- | ------- |
-| `paths.*` | Workspace-relative paths for backlog, outcomes, work-registry, worklog, report output |
-| `stale_rules.by_phase` | Stale thresholds per phase (days) |
-| `scan_paths` | Directories to scan for governance review |
-| `exclude_paths` | Directories excluded from scan |
-| `new_file_window_days` | Days window for "new this week" classification |
+| Field | Default | Purpose |
+| ----- | ------- | ------- |
+| `workspace_root` | auto-detected | Leave blank — only set if auto-detection fails |
+| `worklog_path` | `wilma/worklog.md` | Path to worklog file |
+| `index_path` | `wilma/file-index.md` | Path to file index |
+| `scan_paths` | `["wilma/"]` | Directories scanned by weekly review |
+| `stale_days` | `14` | Days without update before a file is considered stale |
+| `frontmatter_fields` | `[]` | Fields weekly-review checks for completeness. If blank, only checks for presence of any frontmatter block. |
+| `frontmatter_template_path` | `""` | Path to a workspace `.md` file whose frontmatter keys define the required field set (alternative to `frontmatter_fields`). |
+| `worklog_tracked_fields` | `[]` | Frontmatter fields extracted from each modified file and appended as extra columns in the worklog. |
 
 ---
 
@@ -123,23 +110,15 @@ Hook scripts resolve workspace root in priority order:
 
 ---
 
-## Frontmatter Standard
+## Frontmatter
 
-`weekly-review` enforces the following frontmatter fields:
+wilma does not enforce a specific frontmatter schema. You define what fields matter for your workspace during `/wilma-setup`.
 
-```yaml
----
-title: ""
-type: skill | agent | plugin | guide | template | prompt | research | design | draft
-phase: discover | define | develop | deliver
-version: "0.1.0"
-author: ""
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
-project: ""
-outcome: "O-XXX"
-confluence_page: ""
----
-```
+Two config fields control governance behaviour:
 
-Files missing frontmatter are **Unclassified**. Files with frontmatter but no valid `outcome` are **Orphaned**. Both surface in `/weekly-review`.
+- `frontmatter_fields` — list of field names weekly-review checks. Files missing any of these fields are flagged as incomplete.
+- `frontmatter_template_path` — path to a `.md` file in your workspace whose frontmatter keys are used as the required field set. Useful when you already have a document template.
+
+If neither is configured, weekly-review only distinguishes between files that have a frontmatter block and files that don't.
+
+The `outcome` field is special: if present in your configured field set (or template), weekly-review uses it to link files to outcomes and detect orphans.

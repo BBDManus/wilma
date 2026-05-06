@@ -45,6 +45,6 @@ Only proceed if the user types exactly `CONFIRM` (case-insensitive). On any othe
 ## Notes
 
 - The rebuild script derives workspace root automatically from its own location (no hardcoded paths).
-- Config is loaded from `.claude/plugins/simple-filekeeper/filekeeper-rules.json` if present, otherwise from the plugin default at `.claude/plugins/wilma/config/filekeeper-rules.default.json`.
+- `index_path` is read from `.claude/wilma.local.md` (`index_path` field). Exclusion rules (`exclude_dirs`, `exclude_paths`, `index_exempt_files`) are also read from `wilma.local.md`. If the file or any field is absent, built-in defaults apply.
 - After rebuild, incremental hooks resume normal operation automatically.
-- To add descriptions back to the index, edit `FILE-INDEX.md` directly — hooks will never overwrite existing descriptions.
+- To add descriptions back to the index, edit the index file directly — hooks will never overwrite existing descriptions.

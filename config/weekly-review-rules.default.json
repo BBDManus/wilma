@@ -1,44 +1,22 @@
 {
   "skill": "weekly-review",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "paths": {
-    "backlog": "planning/backlog.md",
-    "outcomes": "planning/outcomes.md",
-    "work_registry": "planning/work-registry.md",
-    "worklog": "workshop/worklog.md",
-    "report_output": "workshop/_scratch"
+    "backlog": "wilma/backlog.md",
+    "outcomes": "wilma/outcomes.md",
+    "work_registry": "wilma/work-registry.md",
+    "worklog": "wilma/worklog.md",
+    "report_output": "wilma/reports"
   },
-  "stale_rules": {
-    "default_days": 14,
-    "by_phase": {
-      "discover": 30,
-      "define": 21,
-      "develop": 14,
-      "deliver": 7
-    }
-  },
+  "stale_days": 14,
   "scan_paths": [
-    "planning/",
-    "workshop/",
-    "publish/"
+    "wilma/"
   ],
   "exclude_paths": [
-    "resources/",
-    "collaborative/",
-    "workshop/worklog.md",
-    "workshop/_scratch"
+    "wilma/worklog.md",
+    "wilma/file-index.md",
+    "wilma/reports"
   ],
   "orphan_pool_header": "## Orphaned Pool",
-  "required_frontmatter_fields": [
-    "title",
-    "type",
-    "phase",
-    "version",
-    "author",
-    "created",
-    "updated",
-    "project",
-    "outcome"
-  ],
   "new_file_window_days": 7
 }

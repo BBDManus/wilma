@@ -13,7 +13,7 @@ Generate a weekly activity report from the workspace worklog.
 
 1. Determine the worklog path:
    - Read `.claude/wilma.local.md` if it exists — use `worklog_path` field if present
-   - Default: `workshop/worklog.md`
+   - Default: `wilma/worklog.md`
 2. Read the worklog file in full.
 3. Parse all table rows (skip header rows starting with `| Date` or `| ---`).
 4. Filter to current week (Monday–today) unless user specifies a different date range.
@@ -63,4 +63,4 @@ Provide 3–5 concrete, actionable suggestions based on observed patterns. Examp
 
 Output the full report as a markdown document under the `## Worklog Report — Week of YYYY-MM-DD` heading.
 
-Offer to save the report to `workshop/_scratch/worklog-report-YYYY-MM-DD.md` if the user wants a persistent copy.
+Offer to save the report to `{report_output_dir}/worklog-report-YYYY-MM-DD.md` (read `report_output_dir` from `.claude/wilma.local.md`; default: `wilma/reports`) if the user wants a persistent copy.
