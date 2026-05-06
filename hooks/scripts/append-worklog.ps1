@@ -16,18 +16,21 @@ if ($env:CLAUDE_PROJECT_DIR -and (Test-Path $env:CLAUDE_PROJECT_DIR)) {
     $workspace    = Split-Path $dotClaudeDir -Parent
 }
 
-$worklogRelPath = "workshop/worklog.md"
-
 $settingsFile = Join-Path $dotClaudeDir "wilma.local.md"
-if (Test-Path $settingsFile) {
-    $settingsContent = Get-Content $settingsFile -Raw
-    if ($settingsContent -match '(?m)^workspace_root:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
-        $r = $Matches[1].Trim()
-        if (Test-Path $r) { $workspace = $r }
-    }
-    if ($settingsContent -match '(?m)^worklog_path:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
-        $worklogRelPath = $Matches[1].Trim()
-    }
+if (-not (Test-Path $settingsFile)) {
+    Write-Error "wilma: not configured. Run /wilma-setup in Claude Code to get started."
+    exit 1
+}
+
+$worklogRelPath = "wilma/worklog.md"
+
+$settingsContent = Get-Content $settingsFile -Raw
+if ($settingsContent -match '(?m)^workspace_root:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
+    $r = $Matches[1].Trim()
+    if ($r -ne "" -and (Test-Path $r)) { $workspace = $r }
+}
+if ($settingsContent -match '(?m)^worklog_path:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
+    $worklogRelPath = $Matches[1].Trim()
 }
 
 $worklogPath = Join-Path $workspace ($worklogRelPath -replace '/', '\')

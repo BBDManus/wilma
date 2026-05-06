@@ -17,18 +17,31 @@ if ($env:CLAUDE_PROJECT_DIR -and (Test-Path $env:CLAUDE_PROJECT_DIR)) {
 }
 
 $settingsFile = Join-Path $dotClaudeDir "wilma.local.md"
-if (Test-Path $settingsFile) {
-    $content = Get-Content $settingsFile -Raw
-    if ($content -match '(?m)^workspace_root:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
-        $r = $Matches[1].Trim()
-        if (Test-Path $r) { $workspace = $r }
-    }
+if (-not (Test-Path $settingsFile)) {
+    Write-Error "wilma: not configured. Run /wilma-setup in Claude Code to get started."
+    exit 1
 }
 
-# ── Load config ───────────────────────────────────────────────────────────────
+$content = Get-Content $settingsFile -Raw
+if ($content -match '(?m)^workspace_root:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
+    $r = $Matches[1].Trim()
+    if ($r -ne "" -and (Test-Path $r)) { $workspace = $r }
+}
+
+$indexRelPath = "wilma/file-index.md"
+if ($content -match '(?m)^index_path:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
+    $indexRelPath = $Matches[1].Trim()
+}
+
+# ── Load filekeeper config ────────────────────────────────────────────────────
 $configOverride = Join-Path $dotClaudeDir "plugins\simple-filekeeper\filekeeper-rules.json"
-$configDefault  = Join-Path $pluginRoot "config\filekeeper-rules.default.json"
-$configPath     = if (Test-Path $configOverride) { $configOverride } else { $configDefault }
+$configDefault  = Join-Path $env:CLAUDE_PLUGIN_ROOT "config\filekeeper-rules.default.json"
+if (-not ($env:CLAUDE_PLUGIN_ROOT) -or -not (Test-Path $configDefault)) {
+    $hooksDir2    = Split-Path $PSScriptRoot -Parent
+    $pluginRoot2  = Split-Path $hooksDir2 -Parent
+    $configDefault = Join-Path $pluginRoot2 "config\filekeeper-rules.default.json"
+}
+$configPath = if (Test-Path $configOverride) { $configOverride } else { $configDefault }
 
 if (-not (Test-Path $configPath)) {
     Write-Warning "verify-file-index: config not found at $configPath"
@@ -36,13 +49,13 @@ if (-not (Test-Path $configPath)) {
 }
 
 $config       = Get-Content $configPath -Raw | ConvertFrom-Json
-$indexPath    = Join-Path $workspace $config.index_path
+$indexPath    = Join-Path $workspace $indexRelPath
 $excludeDirs  = $config.exclude_dirs
 $excludePaths = $config.exclude_paths
 $exemptFiles  = $config.index_exempt_files
 
 if (-not (Test-Path $indexPath)) {
-    Write-Warning "FILE-INDEX.md not found at $indexPath. Run rebuild-index skill first."
+    Write-Warning "File index not found at $indexPath. Run /wilma:rebuild-index first."
     exit 1
 }
 
