@@ -25,6 +25,7 @@ Read `.claude/wilma.local.md` and extract these fields from the YAML frontmatter
 | `weekly_review_exclude_paths` | `["wilma/worklog.md", "wilma/file-index.md", "wilma/reports"]` |
 | `new_file_window_days` | `7` |
 | `orphan_pool_header` | `## Orphaned Pool` |
+| `outcome_field` | `outcome` |
 | `frontmatter_fields` | `[]` |
 | `frontmatter_template_path` | `""` |
 
@@ -36,7 +37,7 @@ After loading config, determine the active required field set:
 2. Else if `frontmatter_fields` is non-empty: use those field names as `required_fields`.
 3. Else: `required_fields` = `[]` (no field-level checking — only presence of any frontmatter block matters).
 
-The field `outcome` is special: if it appears in `required_fields` (or is present in the template frontmatter), outcome-linkage checking is enabled. Otherwise orphan detection is skipped and all files with frontmatter are treated as linked.
+Outcome linkage: if `outcome_field` is non-empty (default: `outcome`), weekly-review checks that every scanned file has that field set to a value present in `outcomes.md`. If `outcome_field` is blank, orphan detection and hollow-outcome checks are skipped entirely.
 
 ## Scan Phase
 
@@ -60,8 +61,8 @@ Assign exactly one class per file. Use first matching rule top-to-bottom:
 | ----- | -------------- |
 | **Unclassified** | No frontmatter block present |
 | **Incomplete** | Frontmatter present; one or more `required_fields` are missing or empty (only applies when `required_fields` is non-empty) |
-| **Orphaned** | Frontmatter present and complete (or no `required_fields`); `outcome` field missing/empty/not found in `outcomes.md` (only applies when `outcome` is in `required_fields` or outcome-linkage is enabled) |
-| **Stale** | Frontmatter present; `days_since_updated` > `stale_days`; file still under `drafts/` or `planning/` |
+| **Orphaned** | Frontmatter present and complete (or no `required_fields`); `{outcome_field}` value missing/empty/not found in `outcomes.md` (only applies when `outcome_field` is non-empty) |
+| **Stale** | Frontmatter present; `days_since_updated` > `stale_days` |
 | **New** | `created` date within last `new_file_window_days` days |
 | **Progressed** | `updated` date within last `new_file_window_days` days |
 | **Healthy** | Frontmatter present; not stale; not new this week; passes all configured checks |
@@ -104,7 +105,7 @@ Files with frontmatter but no valid `outcome` linkage. For each, propose a match
 - [filename](path)
   Last updated: YYYY-MM-DD
   Suggested outcome: O-002 — Prompt library for analyst use cases
-  Action: add `outcome: "O-002"` to frontmatter
+  Action: add `{outcome_field}: "O-002"` to frontmatter
 ```
 
 ### 5. Unclassified Files
@@ -118,12 +119,12 @@ Files with valid outcome but no progression past `stale_days` threshold. Group b
 ```
 - [filename](path)
   Outcome: O-001 | Last updated: YYYY-MM-DD (N days ago, threshold: {stale_days}d)
-  Still in: drafts/ — consider moving to review/ or adding backlog task to resume
+  Action: add a backlog task to resume or mark as complete
 ```
 
 ### 7. Hollow Outcomes
 
-Outcomes in `outcomes.md` with no files pointing to them via `outcome:` frontmatter field.
+Outcomes in `outcomes.md` with no files pointing to them via the `{outcome_field}` frontmatter field.
 
 ### 8. Proposed Backlog Additions
 
@@ -149,4 +150,4 @@ After user responds to sections 8 and 9:
 
 - Do not auto-modify frontmatter in scanned files — only suggest; user applies manually.
 - Cross-reference `worklog.md` for files that appear orphaned but had heavy recent activity — note this in the orphan entry as context.
-- Stale detection applies only to files under `drafts/` or `planning/` subfolders — files in `output/`, `review/`, or `publish/` are not stale by definition.
+- Stale detection applies to all scanned files with frontmatter. There is no folder restriction — any file not updated within `stale_days` is considered stale.

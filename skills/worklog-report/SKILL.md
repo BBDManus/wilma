@@ -11,11 +11,14 @@ Generate a weekly activity report from the workspace worklog.
 
 ## Setup
 
-1. Determine the worklog path:
-   - Read `.claude/wilma.local.md` if it exists — use `worklog_path` field if present
-   - Default: `wilma/worklog.md`
+1. Read `.claude/wilma.local.md` if it exists. Extract:
+   - `worklog_path` — default: `wilma/worklog.md`
+   - `worklog_tracked_fields` — default: `[]`
+   - `report_output_dir` — default: `wilma/reports`
 2. Read the worklog file in full.
 3. Parse all table rows (skip header rows starting with `| Date` or `| ---`).
+   - Base columns (always present, positional): `Date`, `Time`, `Tool`, `File/Command`, `Action`, `Project`, `Description`
+   - If `worklog_tracked_fields` is non-empty, columns 8+ correspond to those fields in order. Parse them by position; treat blank/missing cells as empty string.
 4. Filter to current week (Monday–today) unless user specifies a different date range.
 
 ## Report Sections

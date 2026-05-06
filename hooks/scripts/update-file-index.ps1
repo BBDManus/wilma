@@ -34,27 +34,21 @@ if ($content -match '(?m)^index_path:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
     $indexRelPath = $Matches[1].Trim()
 }
 
-# ── Load filekeeper config ────────────────────────────────────────────────────
-$configOverride = Join-Path $dotClaudeDir "plugins\simple-filekeeper\filekeeper-rules.json"
-$configDefault  = Join-Path $env:CLAUDE_PLUGIN_ROOT "config\filekeeper-rules.default.json"
-if (-not ($env:CLAUDE_PLUGIN_ROOT) -or -not (Test-Path $configDefault)) {
-    # fallback for local install
-    $hooksDir2    = Split-Path $PSScriptRoot -Parent
-    $pluginRoot2  = Split-Path $hooksDir2 -Parent
-    $configDefault = Join-Path $pluginRoot2 "config\filekeeper-rules.default.json"
-}
-$configPath = if (Test-Path $configOverride) { $configOverride } else { $configDefault }
-
-if (-not (Test-Path $configPath)) {
-    Write-Warning "update-file-index: config not found at $configPath"
-    exit 1
+# ── Load filekeeper config from wilma.local.md ───────────────────────────────
+function Read-YamlArray {
+    param([string]$fieldName, [string]$fileContent, [string[]]$default)
+    if ($fileContent -match "(?m)^${fieldName}:\s*(\[.*?\])\s*$") {
+        $raw = $Matches[1]
+        $m   = [regex]::Matches($raw, '"([^"]*)"')
+        if ($m.Count -gt 0) { return $m | ForEach-Object { $_.Groups[1].Value } }
+    }
+    return $default
 }
 
-$config       = Get-Content $configPath -Raw | ConvertFrom-Json
 $indexPath    = Join-Path $workspace $indexRelPath
-$excludeDirs  = $config.exclude_dirs
-$excludePaths = $config.exclude_paths
-$exemptFiles  = $config.index_exempt_files
+$excludeDirs  = Read-YamlArray "exclude_dirs"       $content @(".claude", ".git", "wilma")
+$excludePaths = Read-YamlArray "exclude_paths"      $content @()
+$exemptFiles  = Read-YamlArray "index_exempt_files" $content @()
 
 if (-not (Test-Path $indexPath)) {
     Write-Warning "File index missing at $indexPath. Run /wilma:rebuild-index first."

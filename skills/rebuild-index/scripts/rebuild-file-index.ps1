@@ -42,7 +42,7 @@ if ($content -match '(?m)^index_path:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
 }
 
 # Helper: parse inline JSON array from a YAML frontmatter line, e.g. ["a", "b", "c"]
-function Parse-YamlArray {
+function Read-YamlArray {
     param([string]$fieldName, [string]$fileContent, [string[]]$default)
     if ($fileContent -match "(?m)^${fieldName}:\s*(\[.*?\])\s*$") {
         $raw = $Matches[1]
@@ -55,9 +55,9 @@ function Parse-YamlArray {
     return $default
 }
 
-$excludeDirs  = Parse-YamlArray "exclude_dirs"       $content @(".claude", ".git", "wilma")
-$excludePaths = Parse-YamlArray "exclude_paths"      $content @()
-$exemptFiles  = Parse-YamlArray "index_exempt_files" $content @()
+$excludeDirs  = Read-YamlArray "exclude_dirs"       $content @(".claude", ".git", "wilma")
+$excludePaths = Read-YamlArray "exclude_paths"      $content @()
+$exemptFiles  = Read-YamlArray "index_exempt_files" $content @()
 
 # ── Build index ───────────────────────────────────────────────────────────────
 $indexPath = Join-Path $workspace $indexRelPath

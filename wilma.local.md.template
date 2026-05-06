@@ -16,6 +16,7 @@ scan_paths: ["wilma/"]
 weekly_review_exclude_paths: ["wilma/worklog.md", "wilma/file-index.md", "wilma/reports"]
 new_file_window_days: 7
 orphan_pool_header: "## Orphaned Pool"
+outcome_field: "outcome"
 frontmatter_fields: []
 frontmatter_template_path: ""
 worklog_tracked_fields: []
@@ -46,6 +47,7 @@ Copy this file to `.claude/wilma.local.md` in your workspace root.
 | `weekly_review_exclude_paths` | `["wilma/worklog.md", "wilma/file-index.md", "wilma/reports"]` | Paths excluded from weekly review scanning. |
 | `new_file_window_days` | `7` | Files created within this many days are considered "new" in weekly review. |
 | `orphan_pool_header` | `## Orphaned Pool` | Markdown heading used to locate the orphaned pool section in work-registry.md. |
+| `outcome_field` | `outcome` | Name of the frontmatter field used to link files to outcomes. Drives orphan detection and hollow-outcome checks in weekly-review. Change if your workspace uses a different field name (e.g. `epic`, `objective`). |
 | `frontmatter_fields` | `[]` | Field names weekly-review checks for completeness. Files missing any of these are flagged. Leave empty to only check for presence of any frontmatter block. |
 | `frontmatter_template_path` | `""` | Path to a workspace `.md` file whose frontmatter keys define the required field set. Takes precedence over `frontmatter_fields` if set. |
 | `worklog_tracked_fields` | `[]` | Frontmatter fields extracted from each modified file and appended as extra columns in the worklog row. |
