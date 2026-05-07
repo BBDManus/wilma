@@ -26,7 +26,7 @@ Manually append a work entry to the workspace worklog.
    ```
    | {date} | {time} | Manual | - | manual | {project} | {description} |  |  |
    ```
-6. Append the row using Bash `Add-Content` — not Write/Edit, to avoid triggering the file-index hook on worklog.md.
+6. Append the row using Bash `printf` — not Write/Edit, to avoid triggering the file-index hook on worklog.md.
 7. Confirm to user with a one-line preview of what was logged.
 
 ## Notes
@@ -35,7 +35,7 @@ Manually append a work entry to the workspace worklog.
 - `Action` column is always `manual`.
 - `File/Command` column is always `-` (no associated file for manual entries).
 - Empty cells for tracked fields are intentional — no file context to extract values from.
-- Use Bash to append (`Add-Content -Path {path} -Value {row} -Encoding UTF8`).
+- Use Bash to append: `printf '%s\n' "{row}" >> "{path}"`
 
 ## Worklog Table Format
 

@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -ExecutionPolicy Bypass -File \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/update-file-index.ps1\"",
+            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/update-file-index.sh\"",
             "timeout": 30
           }
         ]
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -ExecutionPolicy Bypass -File \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/verify-file-index.ps1\"",
+            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/verify-file-index.sh\"",
             "timeout": 30
           }
         ]
@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -ExecutionPolicy Bypass -File \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/append-worklog.ps1\"",
+            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/append-worklog.sh\"",
             "timeout": 15
           }
         ]

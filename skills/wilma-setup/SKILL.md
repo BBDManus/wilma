@@ -13,12 +13,43 @@ Interactive guided setup wizard for the wilma plugin. Asks all required configur
 
 ## Overview
 
-Run four phases in order. Do not write any files before Phase 4.
+Run five phases in order. Do not write any files before Phase 4.
 
+0. **Phase 0** — Verify runtime dependencies (bash, python3)
 1. **Phase 1** — Load existing config, ask core questions (paths + scope + depth)
 2. **Phase 2** — Ask governance paths, behaviour settings, and frontmatter/worklog config (full depth only)
 3. **Phase 3** — Detect missing workspace files, ask per-file whether to create them
 4. **Phase 4** — Write all config and workspace files, update settings.json, update .gitignore
+
+---
+
+## Phase 0 — Dependency Check
+
+Run both checks via Bash before doing anything else:
+
+```bash
+bash --version 2>&1 | head -1
+```
+```bash
+python3 --version 2>&1
+```
+
+**If both succeed:** proceed silently to Phase 1.
+
+**If either fails:** stop immediately and report which dependency is missing:
+
+```
+⚠ Missing dependency: {bash|python3}
+
+wilma requires both bash and python3 to be on PATH.
+
+  bash    — Git for Windows (includes bash), WSL, or macOS/Linux built-in
+  python3 — https://python.org/downloads  |  winget install Python.Python.3
+
+Install the missing tool, restart your terminal, then run /wilma-setup again.
+```
+
+Do not proceed past Phase 0 until both dependencies are confirmed present.
 
 ---
 

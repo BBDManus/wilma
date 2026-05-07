@@ -14,8 +14,8 @@ Two PostToolUse hooks keep the index current:
 
 | Hook script | Triggers on | Action |
 | ----------- | ----------- | ------ |
-| `update-file-index.ps1` | Write, Edit | Appends any new files not yet in the index |
-| `verify-file-index.ps1` | Glob, Grep, Read | Scans for files on disk absent from index; calls update if any found |
+| `update-file-index.sh` | Write, Edit | Appends any new files not yet in the index |
+| `verify-file-index.sh` | Glob, Grep, Read | Scans for files on disk absent from index; calls update if any found |
 
 Manual full rebuild available via the `rebuild-index` skill. Never runs automatically — it destroys manual descriptions.
 

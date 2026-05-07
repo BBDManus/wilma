@@ -13,6 +13,17 @@ Passive workspace maintenance for Claude Code. wilma keeps a file index and work
 | **Manual log entry** | `/worklog-add <description>` — log meetings, decisions, or research not captured automatically. |
 | **Index rebuild** | `/wilma:rebuild-index` — full rebuild from scratch when the index is corrupt or out of date. |
 
+## Prerequisites
+
+wilma hooks run as bash scripts and parse JSON using python3. Both must be available on `PATH`.
+
+| Dependency | Check | Install |
+| ---------- | ----- | ------- |
+| `bash` | `bash --version` | Git for Windows (includes bash), WSL, or macOS/Linux built-in |
+| `python3` | `python3 --version` | [python.org](https://python.org/downloads) or `winget install Python.Python.3` |
+
+The `/wilma-setup` wizard checks both before configuring anything.
+
 ## Getting started
 
 ### 1. Enable the plugin
@@ -71,3 +82,7 @@ Use `frontmatter_fields` or `frontmatter_template_path` to tell weekly review wh
 | `/worklog-report` | Generate a weekly activity report |
 | `/weekly-review` | Governance scan — orphaned, stale, and unclassified files |
 | `/wilma:rebuild-index` | Full file index rebuild (destructive — requires confirmation) |
+
+## Upcoming changes
+
+- **Remove legacy PowerShell scripts** — `hooks/scripts/*.ps1` and `skills/rebuild-index/scripts/rebuild-file-index.ps1` are kept as backup while the replacement bash scripts are under test. Once verified, the `.ps1` files will be deleted.

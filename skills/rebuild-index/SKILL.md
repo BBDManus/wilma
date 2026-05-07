@@ -35,7 +35,7 @@ Only proceed if the user types exactly `CONFIRM` (case-insensitive). On any othe
 2. If confirmed: run the rebuild script via Bash:
 
    ```bash
-   powershell -ExecutionPolicy Bypass -File "$CLAUDE_PLUGIN_ROOT/skills/rebuild-index/scripts/rebuild-file-index.ps1"
+   bash "$CLAUDE_PLUGIN_ROOT/skills/rebuild-index/scripts/rebuild-file-index.sh"
    ```
 
 3. Report the result to the user:
