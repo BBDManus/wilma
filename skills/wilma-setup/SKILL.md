@@ -44,6 +44,8 @@ Attempt to Read `.claude/wilma.local.md`. If it exists, parse the YAML frontmatt
 - `new_file_window_days`
 - `orphan_pool_header`
 - `outcome_field`
+- `updated_field`
+- `created_field`
 - `frontmatter_fields`
 - `frontmatter_template_path`
 - `worklog_tracked_fields`
@@ -68,6 +70,8 @@ If the file does not exist, use these defaults:
 | `new_file_window_days` | `7` |
 | `orphan_pool_header` | `## Orphaned Pool` |
 | `outcome_field` | `outcome` |
+| `updated_field` | `updated` |
+| `created_field` | `created` |
 | `frontmatter_fields` | `[]` |
 | `frontmatter_template_path` | `""` |
 | `worklog_tracked_fields` | `[]` |
@@ -111,7 +115,7 @@ Strip any leading `./` from path values before storing.
 ### Batch B — Behaviour settings:
 
 - Q1: "Paths to exclude from file index? Comma-separated, use trailing `/` for directories. (current: `{exclude_paths}`)"
-  - Options: current value | `.claude/, .git/, wilma/` | Other
+  - Options: current value | `.claude/, .git/` | Other
 - Q2: "Paths to scan during weekly review? Comma-separated. (current: `{scan_paths}`)"
   - Options: current value | `wilma/` | Other
 - Q3: "Days before a file is considered stale in weekly review? (current: `{stale_days}`)"
@@ -125,24 +129,32 @@ Ask Q1 first, then Q2, then Q3 (Q3 answer determines whether to ask Q4).
 
 - Q1: "What frontmatter field do your files use to link to an outcome or goal? (current: `{outcome_field}`)"
   - Options: current value | `outcome` | Other
-  - Store as `outcome_field`. This field drives orphan detection and hollow-outcome checks. If your workspace does not use outcome linkage at all, leave blank to disable.
+  - Store as `outcome_field`. Drives orphan detection and hollow-outcome checks. Leave blank to disable.
 
-- Q2: "How should weekly-review determine if a file's frontmatter is complete?"
+- Q2: "What frontmatter field holds the last-modified date? Used for stale and progressed detection. (current: `{updated_field}`)"
+  - Options: current value | `updated` | Other
+  - Store as `updated_field`. Leave blank to skip date-based stale/progressed checks.
+
+- Q3: "What frontmatter field holds the creation date? Used for new-file detection. (current: `{created_field}`)"
+  - Options: current value | `created` | Other
+  - Store as `created_field`. Leave blank to skip new-file detection.
+
+- Q4: "How should weekly-review determine if a file's frontmatter is complete?"
   - Options:
     - `None — just check that a frontmatter block exists` — no field list configured; files with any frontmatter block pass, files with no block are unclassified
     - `Specify fields — I'll type the required field names` — ask Q2 (inline list)
     - `Use a template file — point to a .md file in my workspace` — ask Q2 (file path)
 
-- Q3 (if "Specify fields"):
+- Q5 (if "Specify fields"):
   - "Which frontmatter fields are required? Comma-separated. (current: `{frontmatter_fields}`)"
   - Store as `frontmatter_fields` array; set `frontmatter_template_path` = `""`
 
-- Q3 (if "Use a template file"):
+- Q5 (if "Use a template file"):
   - "Path to a .md file whose frontmatter keys define the required field set? (current: `{frontmatter_template_path}`)"
   - Store as `frontmatter_template_path`; set `frontmatter_fields` = `[]`
   - Validate: attempt to Read the file. If not found, warn and keep the previous value (or blank if first setup).
 
-- Q4: "Which frontmatter fields should the worklog capture per file write? Comma-separated. Leave blank to capture none. (current: `{worklog_tracked_fields}`)"
+- Q6: "Which frontmatter fields should the worklog capture per file write? Comma-separated. Leave blank to capture none. (current: `{worklog_tracked_fields}`)"
   - Options: current value | blank (none) | Other
   - Store as `worklog_tracked_fields` array
 
@@ -207,6 +219,8 @@ weekly_review_exclude_paths: {weekly_review_exclude_paths_as_json_array}
 new_file_window_days: {new_file_window_days}
 orphan_pool_header: "{orphan_pool_header}"
 outcome_field: "{outcome_field}"
+updated_field: "{updated_field}"
+created_field: "{created_field}"
 frontmatter_fields: {frontmatter_fields_as_json_array}
 frontmatter_template_path: "{frontmatter_template_path}"
 worklog_tracked_fields: {worklog_tracked_fields_as_json_array}

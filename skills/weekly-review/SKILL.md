@@ -26,6 +26,8 @@ Read `.claude/wilma.local.md` and extract these fields from the YAML frontmatter
 | `new_file_window_days` | `7` |
 | `orphan_pool_header` | `## Orphaned Pool` |
 | `outcome_field` | `outcome` |
+| `updated_field` | `updated` |
+| `created_field` | `created` |
 | `frontmatter_fields` | `[]` |
 | `frontmatter_template_path` | `""` |
 
@@ -45,9 +47,11 @@ For every `.md` file under each path in `scan_paths`, excluding `weekly_review_e
 
 1. Read file frontmatter (YAML block between `---` delimiters at top of file).
 2. Record all frontmatter key/value pairs present.
-3. Compute `days_since_updated` = today minus `updated` date (use `created` if `updated` absent; skip stale check if neither present).
-4. Determine if stale: `days_since_updated` > `stale_days`.
-5. Classify the file (see Classification below).
+3. If `updated_field` is non-empty: read that field's value as the last-modified date. If absent, fall back to `created_field` value if non-empty. If no date found, skip stale/progressed checks for this file.
+4. If `created_field` is non-empty: read that field's value as the creation date. If absent, skip new-file check for this file.
+5. Compute `days_since_updated` = today minus last-modified date (step 3).
+6. Determine if stale: `days_since_updated` > `stale_days` (only when a date was found).
+7. Classify the file (see Classification below).
 
 Also read `outcomes.md` — collect all outcome IDs. Any outcome ID with zero files pointing to it = **hollow outcome**.
 
@@ -62,9 +66,9 @@ Assign exactly one class per file. Use first matching rule top-to-bottom:
 | **Unclassified** | No frontmatter block present |
 | **Incomplete** | Frontmatter present; one or more `required_fields` are missing or empty (only applies when `required_fields` is non-empty) |
 | **Orphaned** | Frontmatter present and complete (or no `required_fields`); `{outcome_field}` value missing/empty/not found in `outcomes.md` (only applies when `outcome_field` is non-empty) |
-| **Stale** | Frontmatter present; `days_since_updated` > `stale_days` |
-| **New** | `created` date within last `new_file_window_days` days |
-| **Progressed** | `updated` date within last `new_file_window_days` days |
+| **Stale** | Frontmatter present; `days_since_updated` > `stale_days` (only when `updated_field` or `created_field` resolves a date) |
+| **New** | `{created_field}` value within last `new_file_window_days` days (only when `created_field` is non-empty) |
+| **Progressed** | `{updated_field}` value within last `new_file_window_days` days (only when `updated_field` is non-empty) |
 | **Healthy** | Frontmatter present; not stale; not new this week; passes all configured checks |
 
 A file can carry multiple labels — e.g. **New** + **Incomplete**, or **Stale** + **Orphaned**.
