@@ -4,8 +4,8 @@
 # Full rebuild: use the rebuild-index skill or run rebuild-file-index.ps1 manually.
 
 # ── Resolve workspace root ────────────────────────────────────────────────────
-# $CLAUDE_PROJECT_DIR is provided by the harness and works for both local and
-# global (marketplace cache) installs. Walk-up fallback for local installs only.
+# Priority: workspace_root from config > $CLAUDE_PROJECT_DIR > walk-up fallback.
+# workspace_root is written by /wilma-setup and is the authoritative source.
 if ($env:CLAUDE_PROJECT_DIR -and (Test-Path $env:CLAUDE_PROJECT_DIR)) {
     $workspace    = $env:CLAUDE_PROJECT_DIR
     $dotClaudeDir = Join-Path $workspace ".claude"
@@ -24,9 +24,13 @@ if (-not (Test-Path $settingsFile)) {
 }
 
 $content = Get-Content $settingsFile -Raw
+# workspace_root in config always wins — set by /wilma-setup at project scope.
 if ($content -match '(?m)^workspace_root:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
     $r = $Matches[1].Trim()
-    if ($r -ne "" -and (Test-Path $r)) { $workspace = $r }
+    if ($r -ne "" -and (Test-Path $r)) {
+        $workspace    = $r
+        $dotClaudeDir = Join-Path $workspace ".claude"
+    }
 }
 
 $indexRelPath = "wilma/file-index.md"

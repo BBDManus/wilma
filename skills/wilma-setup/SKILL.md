@@ -198,11 +198,13 @@ Execute all writes in this order. Report each completed action.
 
 Run `mkdir -p .claude` via Bash first.
 
+Resolve the workspace root by running `pwd` via Bash. Store the output (trimmed) as `workspace_root`. This must always be an absolute path — never leave it blank.
+
 Write `.claude/wilma.local.md` with this exact structure (substitute actual values):
 
 ```text
 ---
-workspace_root: ""
+workspace_root: "{workspace_root}"
 worklog_path: "{worklog_path}"
 index_path: "{index_path}"
 backlog_path: "{backlog_path}"
@@ -312,6 +314,7 @@ When `/wilma-setup` is run on an already-configured workspace:
 
 ## Edge Cases
 
+- `workspace_root`: always resolved via `pwd` at write time — never left blank, never taken from user input
 - Blank answer to path question: keep the current/default value
 - Path with leading `./`: strip before storing
 - Comma-separated array input: split on `,`, trim each element
