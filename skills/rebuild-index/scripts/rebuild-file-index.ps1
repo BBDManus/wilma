@@ -41,22 +41,26 @@ if ($content -match '(?m)^index_path:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
     $indexRelPath = $Matches[1].Trim()
 }
 
-# Helper: parse inline JSON array from a YAML frontmatter line, e.g. ["a", "b", "c"]
+# Returns parsed array if field present (even if empty), $null if field absent.
 function Read-YamlArray {
-    param([string]$fieldName, [string]$fileContent, [string[]]$default)
+    param([string]$fieldName, [string]$fileContent)
     if ($fileContent -match "(?m)^${fieldName}:\s*(\[.*?\])\s*$") {
         $raw = $Matches[1]
-        # Extract quoted strings from the array
-        $matches2 = [regex]::Matches($raw, '"([^"]*)"')
-        if ($matches2.Count -gt 0) {
-            return $matches2 | ForEach-Object { $_.Groups[1].Value }
-        }
+        $m   = [regex]::Matches($raw, '"([^"]*)"')
+        if ($m.Count -gt 0) { return @($m | ForEach-Object { $_.Groups[1].Value }) }
+        return @()
     }
-    return $default
+    return $null
 }
 
-$excludePaths = Read-YamlArray "exclude_paths"      $content @(".claude/", ".git/", "wilma/")
-$exemptFiles  = Read-YamlArray "index_exempt_files" $content @()
+$excludePaths = Read-YamlArray "exclude_paths"      $content
+$exemptFiles  = Read-YamlArray "index_exempt_files" $content
+
+if ($null -eq $excludePaths) {
+    Write-Error "wilma: exclude_paths not found in wilma.local.md. Re-run /wilma-setup to repair config."
+    exit 1
+}
+if ($null -eq $exemptFiles) { $exemptFiles = @() }
 
 # ── Build index ───────────────────────────────────────────────────────────────
 $indexPath = Join-Path $workspace $indexRelPath

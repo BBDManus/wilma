@@ -34,19 +34,27 @@ if ($content -match '(?m)^index_path:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
 }
 
 # ── Load filekeeper config from wilma.local.md ───────────────────────────────
+# Returns parsed array if field present (even if empty), $null if field absent.
 function Read-YamlArray {
-    param([string]$fieldName, [string]$fileContent, [string[]]$default)
+    param([string]$fieldName, [string]$fileContent)
     if ($fileContent -match "(?m)^${fieldName}:\s*(\[.*?\])\s*$") {
         $raw = $Matches[1]
         $m   = [regex]::Matches($raw, '"([^"]*)"')
-        if ($m.Count -gt 0) { return $m | ForEach-Object { $_.Groups[1].Value } }
+        if ($m.Count -gt 0) { return @($m | ForEach-Object { $_.Groups[1].Value }) }
+        return @()
     }
-    return $default
+    return $null
 }
 
 $indexPath    = Join-Path $workspace $indexRelPath
-$excludePaths = Read-YamlArray "exclude_paths"      $content @(".claude/", ".git/", "wilma/")
-$exemptFiles  = Read-YamlArray "index_exempt_files" $content @()
+$excludePaths = Read-YamlArray "exclude_paths"      $content
+$exemptFiles  = Read-YamlArray "index_exempt_files" $content
+
+if ($null -eq $excludePaths) {
+    Write-Error "wilma: exclude_paths not found in wilma.local.md. Re-run /wilma-setup to repair config."
+    exit 1
+}
+if ($null -eq $exemptFiles) { $exemptFiles = @() }
 
 if (-not (Test-Path $indexPath)) {
     Write-Warning "File index not found at $indexPath. Run /wilma:rebuild-index first."
