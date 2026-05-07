@@ -5,20 +5,15 @@
 # Invoked by the rebuild-index skill after user confirmation.
 
 # ── Resolve workspace root ────────────────────────────────────────────────────
-# Priority: workspace_root from config > $CLAUDE_PROJECT_DIR > walk-up fallback.
-# workspace_root is written by /wilma-setup and is the authoritative source.
-if ($env:CLAUDE_PROJECT_DIR -and (Test-Path $env:CLAUDE_PROJECT_DIR)) {
-    $workspace    = $env:CLAUDE_PROJECT_DIR
-    $dotClaudeDir = Join-Path $workspace ".claude"
-} else {
-    # Location: skills/rebuild-index/scripts/ (3 levels inside plugin root)
-    $rebuildIndexDir = Split-Path $PSScriptRoot -Parent     # rebuild-index/
-    $skillsDir       = Split-Path $rebuildIndexDir -Parent  # skills/
-    $pluginRoot      = Split-Path $skillsDir -Parent        # wilma/
-    $pluginsDir      = Split-Path $pluginRoot -Parent       # plugins/
-    $dotClaudeDir    = Split-Path $pluginsDir -Parent       # .claude/
-    $workspace       = Split-Path $dotClaudeDir -Parent     # workspace root
+# Priority: workspace_root from config > $CLAUDE_PROJECT_DIR.
+# Walk-up from $PSScriptRoot is NOT used: wilma is globally installed, so
+# PSScriptRoot points to the user-level .claude folder, not the project workspace.
+if (-not ($env:CLAUDE_PROJECT_DIR -and (Test-Path $env:CLAUDE_PROJECT_DIR))) {
+    Write-Error "wilma: CLAUDE_PROJECT_DIR not set or does not exist. Ensure you are running inside a Claude Code session."
+    exit 1
 }
+$workspace    = $env:CLAUDE_PROJECT_DIR
+$dotClaudeDir = Join-Path $workspace ".claude"
 
 # ── Load config from wilma.local.md ──────────────────────────────────────────
 $settingsFile = Join-Path $dotClaudeDir "wilma.local.md"
@@ -29,7 +24,7 @@ if (-not (Test-Path $settingsFile)) {
 
 $content = Get-Content $settingsFile -Raw
 
-# workspace_root in config always wins — set by /wilma-setup at project scope.
+# workspace_root in config overrides CLAUDE_PROJECT_DIR — set by /wilma-setup at project scope.
 if ($content -match '(?m)^workspace_root:\s*["'']?([^"''\r\n]+)["'']?\s*$') {
     $r = $Matches[1].Trim()
     if ($r -ne "" -and (Test-Path $r)) {
