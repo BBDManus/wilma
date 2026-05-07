@@ -34,7 +34,6 @@ Attempt to Read `.claude/wilma.local.md`. If it exists, parse the YAML frontmatt
 - `outcomes_path`
 - `work_registry_path`
 - `report_output_dir`
-- `exclude_dirs`
 - `exclude_paths`
 - `index_exempt_files`
 - `index_behavior_mode`
@@ -59,8 +58,7 @@ If the file does not exist, use these defaults:
 | `outcomes_path` | `wilma/outcomes.md` |
 | `work_registry_path` | `wilma/work-registry.md` |
 | `report_output_dir` | `wilma/reports` |
-| `exclude_dirs` | `[".claude", ".git", "wilma"]` |
-| `exclude_paths` | `[]` |
+| `exclude_paths` | `[".claude/", ".git/", "wilma/"]` |
 | `index_exempt_files` | `[]` |
 | `index_behavior_mode` | `incremental` |
 | `index_missing_action` | `warn_and_exit` |
@@ -112,8 +110,8 @@ Strip any leading `./` from path values before storing.
 
 ### Batch B — Behaviour settings:
 
-- Q1: "Directories to exclude from file index? Comma-separated. (current: `{exclude_dirs}`)"
-  - Options: current value | `.claude, .git, wilma` | Other
+- Q1: "Paths to exclude from file index? Comma-separated, use trailing `/` for directories. (current: `{exclude_paths}`)"
+  - Options: current value | `.claude/, .git/, wilma/` | Other
 - Q2: "Paths to scan during weekly review? Comma-separated. (current: `{scan_paths}`)"
   - Options: current value | `wilma/` | Other
 - Q3: "Days before a file is considered stale in weekly review? (current: `{stale_days}`)"
@@ -199,7 +197,6 @@ backlog_path: "{backlog_path}"
 outcomes_path: "{outcomes_path}"
 work_registry_path: "{work_registry_path}"
 report_output_dir: "{report_output_dir}"
-exclude_dirs: {exclude_dirs_as_json_array}
 exclude_paths: {exclude_paths_as_json_array}
 index_exempt_files: {index_exempt_files_as_json_array}
 index_behavior_mode: "{index_behavior_mode}"

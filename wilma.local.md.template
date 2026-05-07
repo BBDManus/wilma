@@ -6,8 +6,7 @@ backlog_path: "wilma/backlog.md"
 outcomes_path: "wilma/outcomes.md"
 work_registry_path: "wilma/work-registry.md"
 report_output_dir: "wilma/reports"
-exclude_dirs: [".claude", ".git", "wilma"]
-exclude_paths: []
+exclude_paths: [".claude/", ".git/", "wilma/"]
 index_exempt_files: []
 index_behavior_mode: "incremental"
 index_missing_action: "warn_and_exit"
@@ -37,8 +36,7 @@ Copy this file to `.claude/wilma.local.md` in your workspace root.
 | `outcomes_path` | `wilma/outcomes.md` | Path to outcomes register. |
 | `work_registry_path` | `wilma/work-registry.md` | Path to work registry. |
 | `report_output_dir` | `wilma/reports` | Directory where weekly review reports are saved. |
-| `exclude_dirs` | `[".claude", ".git", "wilma"]` | Top-level directories never included in the file index. |
-| `exclude_paths` | `[]` | Sub-paths exempt from file indexing. |
+| `exclude_paths` | `[".claude/", ".git/", "wilma/"]` | Paths excluded from the file index. Matched as prefix against each file's relative path — use a trailing `/` to exclude a directory and all its contents. |
 | `index_exempt_files` | `[]` | Individual filenames never added to the file index. |
 | `index_behavior_mode` | `incremental` | File index update mode. `incremental` = append-only, never rewrites. |
 | `index_missing_action` | `warn_and_exit` | What to do if the index file is missing when a hook runs. |

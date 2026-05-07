@@ -26,8 +26,7 @@ All config is read from `.claude/wilma.local.md` (YAML frontmatter). If the file
 | Field | Default | Purpose |
 | ----- | ------- | ------- |
 | `index_path` | `wilma/file-index.md` | Relative path to the index file |
-| `exclude_dirs` | `[".claude", ".git", "wilma"]` | Top-level dirs never indexed |
-| `exclude_paths` | `[]` | Sub-paths exempt from indexing |
+| `exclude_paths` | `[".claude/", ".git/", "wilma/"]` | Paths excluded from indexing — matched as prefix against each file's relative path. Use trailing `/` to exclude a directory and all its contents. |
 | `index_exempt_files` | `[]` | Files never added to index |
 | `index_behavior_mode` | `incremental` | Update mode — `incremental` = append-only, never rewrites |
 | `index_missing_action` | `warn_and_exit` | Behaviour when index file is missing at hook time |
@@ -36,9 +35,8 @@ All config is read from `.claude/wilma.local.md` (YAML frontmatter). If the file
 
 Files excluded from the index when **any** of the following match:
 
-1. Top-level folder is in `exclude_dirs`
-2. Path starts with any entry in `exclude_paths`
-3. Filename matches any entry in `index_exempt_files`
+1. Relative path starts with any entry in `exclude_paths`
+2. Filename matches any entry in `index_exempt_files`
 
 ## Index Format
 

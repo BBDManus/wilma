@@ -55,8 +55,7 @@ function Read-YamlArray {
     return $default
 }
 
-$excludeDirs  = Read-YamlArray "exclude_dirs"       $content @(".claude", ".git", "wilma")
-$excludePaths = Read-YamlArray "exclude_paths"      $content @()
+$excludePaths = Read-YamlArray "exclude_paths"      $content @(".claude/", ".git/", "wilma/")
 $exemptFiles  = Read-YamlArray "index_exempt_files" $content @()
 
 # ── Build index ───────────────────────────────────────────────────────────────
@@ -65,9 +64,7 @@ $today     = Get-Date -Format "yyyy-MM-dd"
 
 $allFiles = Get-ChildItem -Path $workspace -Recurse -File | Where-Object {
     $rel = $_.FullName.Substring($workspace.Length + 1).Replace('\', '/')
-    $top = $rel.Split('/')[0]
 
-    if ($top -in $excludeDirs) { return $false }
     if ($_.Name -in $exemptFiles) { return $false }
     foreach ($ep in $excludePaths) {
         if ($rel.StartsWith($ep)) { return $false }
